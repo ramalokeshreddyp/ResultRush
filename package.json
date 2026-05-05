@@ -1,0 +1,22 @@
+{
+  "name": "aec-result-system",
+  "version": "1.0.0",
+  "description": "AEC Smart Result Access System — Intelligent caching proxy for Aditya Engineering College exam portal",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "keywords": ["aec", "results", "cache", "proxy", "education"],
+  "author": "AEC CSE",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "axios-cookiejar-support": "^4.0.7",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "tough-cookie": "^4.1.3"
+  }
+}

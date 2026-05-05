@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AEC Smart Results — Aditya Engineering College</title>
+  <meta name="description" content="Access your AEC semester results instantly. Fast caching proxy for the AEC exam portal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-particles" aria-hidden="true">
+    <div class="particle p1"></div><div class="particle p2"></div>
+    <div class="particle p3"></div><div class="particle p4"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🎓</span>
+        <div>
+          <span class="logo-title">AEC Smart Results</span>
+          <span class="logo-sub">Aditya Engineering College</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="live-badge" id="liveBadge">● Live</span>
+        <a href="https://examsection.aec.edu.in" target="_blank" rel="noopener" class="portal-link">Official Portal ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero / Search -->
+    <section class="hero" id="heroSection">
+      <h1 class="hero-title">Access Your Results<br><span class="gradient-text">Instantly, Reliably</span></h1>
+      <p class="hero-sub">Smart caching proxy for the AEC Exam Portal — results in milliseconds even during peak traffic.</p>
+
+      <div class="search-wrap">
+        <div class="search-box" id="searchBox">
+          <span class="search-icon">🔍</span>
+          <input
+            id="htnoInput"
+            type="text"
+            class="search-input"
+            placeholder="Enter Hall Ticket Number (e.g. 23A91A05I2)"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            maxlength="12"
+            aria-label="Hall Ticket Number"
+          />
+          <button id="fetchBtn" class="fetch-btn" aria-label="Fetch Result">
+            Fetch Result <span class="btn-arrow">→</span>
+          </button>
+        </div>
+        <div class="search-meta">
+          <label class="toggle-label" for="forceToggle">
+            <input type="checkbox" id="forceToggle" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            Force fresh fetch from portal
+          </label>
+          <span class="hint-text">Press Enter to search</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar" id="statsBar">
+      <div class="stat-item"><span class="stat-icon">⚡</span><span class="stat-val" id="sHits">—</span><span class="stat-lbl">Cache Hits</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-icon">🔄</span><span class="stat-val" id="sMisses">—</span><span class="stat-lbl">Portal Fetches</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-icon">📈</span><span class="stat-val" id="sRate">—</span><span class="stat-lbl">Hit Rate</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-icon">💾</span><span class="stat-val" id="sSize">—</span><span class="stat-lbl">Cached</span></div>
+    </section>
+
+    <!-- Loading -->
+    <section class="loading-section hidden" id="loadingSection" aria-live="polite">
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <p class="loading-title">Fetching from portal…</p>
+        <p class="loading-sub">Logging in and scraping your marks. This takes 5–15 seconds.</p>
+        <div class="loading-steps">
+          <span class="lstep active" id="ls1">🔐 Authenticating</span>
+          <span class="lstep" id="ls2">📄 Fetching Marks</span>
+          <span class="lstep" id="ls3">✅ Done</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error -->
+    <section class="error-section hidden" id="errorSection" aria-live="assertive" role="alert">
+      <div class="error-card">
+        <div class="error-icon">⚠️</div>
+        <h2 class="error-title" id="errTitle">Something went wrong</h2>
+        <p class="error-msg" id="errMsg"></p>
+        <p class="error-hint" id="errHint"></p>
+        <button class="retry-btn" id="retryBtn">Try Again</button>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="result-section hidden" id="resultSection" aria-live="polite">
+
+      <!-- Summary cards row -->
+      <div class="summary-row">
+        <!-- CGPA card -->
+        <div class="summary-card cgpa-card">
+          <div class="cgpa-ring-wrap">
+            <svg viewBox="0 0 100 100" class="cgpa-svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="cgpaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#6c63ff"/>
+                  <stop offset="100%" stop-color="#00d2ff"/>
+                </linearGradient>
+              </defs>
+              <circle class="ring-track" cx="50" cy="50" r="40"/>
+              <circle class="ring-fill"  cx="50" cy="50" r="40" id="cgpaCircle"/>
+            </svg>
+            <span class="cgpa-num" id="cgpaNum">—</span>
+          </div>
+          <p class="card-label">Overall CGPA</p>
+        </div>
+
+        <!-- Credits card -->
+        <div class="summary-card">
+          <div class="card-icon">🏆</div>
+          <div class="card-val" id="creditsVal">—</div>
+          <p class="card-label">Credits Obtained</p>
+        </div>
+
+        <!-- Backlogs card -->
+        <div class="summary-card" id="backlogsCard">
+          <div class="card-icon" id="backlogsIcon">✅</div>
+          <div class="card-val" id="backlogsVal">—</div>
+          <p class="card-label">Backlogs</p>
+        </div>
+
+        <!-- Semester card -->
+        <div class="summary-card">
+          <div class="card-icon">📅</div>
+          <div class="card-val semester-val" id="semVal">—</div>
+          <p class="card-label">Latest Published Semester</p>
+        </div>
+      </div>
+
+      <!-- Student info strip -->
+      <div class="student-strip" id="studentStrip">
+        <div class="student-avatar" id="studentAvatar">PR</div>
+        <div class="student-details">
+          <span class="student-name" id="studentName">—</span>
+          <div class="student-meta">
+            <span class="meta-tag" id="metaHTNo">HTNo: —</span>
+            <span class="meta-tag" id="metaBranch">—</span>
+          </div>
+        </div>
+        <div class="source-pill" id="sourcePill">⚡ Cached</div>
+      </div>
+
+      <!-- Grades table -->
+      <div class="grades-card">
+        <div class="grades-header">
+          <h2 class="grades-title">Latest Published Semester Grades — <span id="semLabel">—</span></h2>
+          <div class="update-note" id="updateNote" aria-hidden="true" style="opacity:0;transition:opacity .25s;color:var(--success);font-size:.9rem;margin-top:6px"></div>
+          <span class="grades-count" id="gradesCount"></span>
+        </div>
+        <div class="table-scroll">
+          <table class="grades-table" id="gradesTable" aria-label="Semester grades">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Grade</th>
+                <th>Credits</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="gradesBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions-row">
+        <button class="action-btn primary" id="newSearchBtn">🔍 New Search</button>
+        <button class="action-btn secondary" id="forceRefreshBtn">🔄 Refresh Data</button>
+        <a href="https://examsection.aec.edu.in" target="_blank" rel="noopener" class="action-btn outline">Official Portal ↗</a>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>AEC Smart Results — Unofficial caching proxy for <strong>Aditya Engineering College</strong></p>
+    <p class="footer-note">No credentials are stored. Results fetched from the official portal and cached for fast access.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

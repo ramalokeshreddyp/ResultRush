@@ -13,6 +13,29 @@ let loaderTimer = null;
 let updatePollTimer = null;
 let lastRenderedSemLabel = null;
 
+// Local (browser) cache to improve perceived instantness
+function getLocalCached(htno) {
+  try {
+    const key = 'aec_local_' + htno.toUpperCase();
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    // Accept local cached data up to 12 hours old to keep UX instant
+    if (obj && obj.fetchedAt) {
+      const age = Date.now() - new Date(obj.fetchedAt).getTime();
+      if (age < 12 * 60 * 60 * 1000) return obj;
+    }
+  } catch (e) {}
+  return null;
+}
+
+function setLocalCached(htno, payload) {
+  try {
+    const key = 'aec_local_' + htno.toUpperCase();
+    localStorage.setItem(key, JSON.stringify(payload));
+  } catch (e) {}
+}
+
 // ── Init ──────────────────────────────────────────────────
 fetchBtn.addEventListener('click', handleFetch);
 htnoInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleFetch(); });
@@ -67,7 +90,17 @@ async function handleFetch() {
   }
 
   fetchBtn.disabled = true;
-  startLoader();
+
+  // Check local browser cache first to render instantly
+  const local = getLocalCached(htno);
+  if (local) {
+    // Render cached payload immediately while we refresh in background
+    renderResult({ success: true, source: 'local', data: local.data, ageMs: Date.now() - new Date(local.fetchedAt).getTime() });
+    // show a subtle update note while background refresh happens
+    var note = document.getElementById('updateNote'); if (note) { note.textContent = 'Showing recent cached result — refreshing...'; note.style.opacity = 1; setTimeout(()=>{ note.style.opacity = 0; }, 3500); }
+  } else {
+    startLoader();
+  }
 
   try {
     var force = forceToggle.checked;
@@ -82,6 +115,8 @@ async function handleFetch() {
     }
 
     renderResult(json);
+    // update local cache for instant future renders
+    try { setLocalCached(htno, { fetchedAt: json.fetchedAt || new Date().toISOString(), data: json.data }); } catch(e){}
     // Track the label we just rendered
     lastRenderedSemLabel = (json.data && (json.data.latestSemLabel || json.data.studentInfo.currentSem)) || null;
     // Start a short-lived background poll to detect new semester updates
@@ -130,6 +165,16 @@ function startUpdatePoll(htno, currentLabel) {
   }, 15000);
 }
 
+// Small toast for subtle feedback
+function showToast(msg, timeout = 3000) {
+  var t = document.getElementById('globalToast');
+  if (!t) {
+    t = document.createElement('div'); t.id = 'globalToast'; t.className = 'toast'; document.body.appendChild(t);
+  }
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, timeout);
+}
+
 // ── Render Result ─────────────────────────────────────────
 function renderResult(json) {
   var d = json.data;
@@ -172,9 +217,15 @@ function renderResult(json) {
     pill.textContent = '⚡ Served from cache';
     pill.className = 'source-pill';
     if (json.ageMs) pill.textContent += ' · ' + formatAge(json.ageMs) + ' ago';
+  } else if (json.source === 'local') {
+    pill.textContent = '🕘 Local cache';
+    pill.className = 'source-pill';
+    if (json.ageMs) pill.textContent += ' · ' + formatAge(json.ageMs) + ' ago';
+    showToast('Loaded recent local result — refreshing in background');
   } else {
     pill.textContent = '🔄 Fresh from portal';
     pill.className = 'source-pill fresh';
+    showToast('Fetched fresh result from portal');
   }
 
   // ── Grades table ───────────────────────────────────────
@@ -201,6 +252,13 @@ function renderResult(json) {
     tr.style.animation = 'fadeInRow .3s ease ' + (i * 0.04) + 's both';
     tbody.appendChild(tr);
   });
+
+  // gentle focus animation on first content row
+  setTimeout(function(){
+    var first = document.querySelector('.grades-table tbody tr');
+    if (first) { first.style.transition = 'box-shadow .6s ease'; first.style.boxShadow = '0 8px 30px rgba(2,6,23,0.45)'; }
+    setTimeout(function(){ if (first) first.style.boxShadow = ''; }, 700);
+  }, 220);
 }
 
 // ── Grade Pill ────────────────────────────────────────────

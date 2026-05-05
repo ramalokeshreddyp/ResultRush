@@ -8,6 +8,16 @@ const cache = require('../services/cache');
 const { scrapeResult } = require('../services/scraper');
 const { PORTAL_FETCH_COOLDOWN_MS } = require('../middleware/rateLimit');
 
+// Health endpoint (status of cache and optional Redis)
+router.get('/health', async (req, res) => {
+  try {
+    const stats = await (typeof cache.statsAsync === 'function' ? cache.statsAsync() : cache.stats());
+    res.json({ success: true, healthy: true, stats });
+  } catch (err) {
+    res.status(500).json({ success: false, healthy: false, error: err.message });
+  }
+});
+
 // Track last portal fetch time per HTNo to enforce cooldown
 const lastFetchTime = new Map();
 

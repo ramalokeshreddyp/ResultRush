@@ -36,9 +36,23 @@ app.use((err, req, res, next) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`\n🎓 AEC Smart Result Access System`);
   console.log(`🚀 Server running at http://localhost:${PORT}`);
   console.log(`📦 Cache TTL: ${(process.env.CACHE_TTL_MS || 3600000) / 60000} minutes`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 });
+
+// Graceful shutdown
+function shutdown(signal) {
+  console.log(`[server] Received ${signal}. Closing server...`);
+  server.close(() => {
+    console.log('[server] HTTP server closed. Exiting.');
+    process.exit(0);
+  });
+  // Force exit after 10s
+  setTimeout(() => process.exit(1), 10000);
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));

@@ -21,8 +21,8 @@
   <!-- Header -->
   <header class="site-header">
     <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">🎓</span>
+      <div class="logo" aria-hidden="false">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z" fill="#6c63ff"/><path d="M2 17l10 5 10-5" stroke="#00d2ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div>
           <span class="logo-title">AEC Smart Results</span>
           <span class="logo-sub">Aditya Engineering College</span>
@@ -38,34 +38,37 @@
   <main>
     <!-- Hero / Search -->
     <section class="hero" id="heroSection">
-      <h1 class="hero-title">Access Your Results<br><span class="gradient-text">Instantly, Reliably</span></h1>
-      <p class="hero-sub">Smart caching proxy for the AEC Exam Portal — results in milliseconds even during peak traffic.</p>
+      <div class="hero-inner container">
+        <div class="hero-copy">
+          <h1 class="hero-title">Access Your Results — <span class="gradient-text">Instantly & Reliably</span></h1>
+          <p class="hero-sub">AEC Smart Results provides instant access to semester marks with a smart cache and polished student experience.</p>
 
-      <div class="search-wrap">
-        <div class="search-box" id="searchBox">
-          <span class="search-icon">🔍</span>
-          <input
-            id="htnoInput"
-            type="text"
-            class="search-input"
-            placeholder="Enter Hall Ticket Number (e.g. 23A91A05I2)"
-            autocomplete="off"
-            autocapitalize="characters"
-            spellcheck="false"
-            maxlength="12"
-            aria-label="Hall Ticket Number"
-          />
-          <button id="fetchBtn" class="fetch-btn" aria-label="Fetch Result">
-            Fetch Result <span class="btn-arrow">→</span>
-          </button>
+          <div class="search-wrap">
+            <div class="search-box" id="searchBox" role="search">
+              <span class="search-icon">🔎</span>
+              <input id="htnoInput" type="text" class="search-input" placeholder="Enter Hall Ticket Number (e.g. 23A91A05I2)" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" aria-label="Hall Ticket Number" />
+              <button id="fetchBtn" class="fetch-btn" aria-label="Fetch Result">Fetch Result <span class="btn-arrow">→</span></button>
+            </div>
+            <div class="search-meta">
+              <label class="toggle-label" for="forceToggle"><input type="checkbox" id="forceToggle" /> <span class="toggle-track"><span class="toggle-thumb"></span></span> Force fresh fetch</label>
+              <span class="hint-text">Press Enter to search · Fast results shown instantly</span>
+            </div>
+          </div>
         </div>
-        <div class="search-meta">
-          <label class="toggle-label" for="forceToggle">
-            <input type="checkbox" id="forceToggle" />
-            <span class="toggle-track"><span class="toggle-thumb"></span></span>
-            Force fresh fetch from portal
-          </label>
-          <span class="hint-text">Press Enter to search</span>
+
+        <div class="hero-art">
+          <!-- Clean SVG illustration -->
+          <svg viewBox="0 0 600 400" width="100%" height="100%" aria-hidden="true">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#6c63ff"/><stop offset="1" stop-color="#00d2ff"/></linearGradient>
+            </defs>
+            <rect x="20" y="50" rx="18" ry="18" width="360" height="260" fill="url(#g1)" opacity="0.12" />
+            <g transform="translate(40,80)">
+              <rect x="0" y="0" width="260" height="28" rx="6" fill="#fff" opacity="0.06" />
+              <rect x="0" y="42" width="220" height="18" rx="6" fill="#fff" opacity="0.04" />
+              <rect x="0" y="74" width="260" height="120" rx="8" fill="#fff" opacity="0.03" />
+            </g>
+          </svg>
         </div>
       </div>
     </section>

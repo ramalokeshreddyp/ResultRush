@@ -81,13 +81,14 @@ body{
 }
 .header-inner{
   max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;height:64px;
+  display:flex;align-items:center;justify-content:space-between;min-height:64px;
+  gap:14px;flex-wrap:wrap;padding:10px 0;
 }
 .logo{display:flex;align-items:center;gap:12px;}
 .logo-icon{font-size:28px;}
 .logo-title{display:block;font-size:.95rem;font-weight:700;}
 .logo-sub{display:block;font-size:.7rem;color:var(--text2);}
-.header-right{display:flex;align-items:center;gap:10px;}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
 .live-badge{
   font-size:.75rem;font-weight:600;color:var(--success);
   padding:4px 12px;border-radius:20px;
@@ -110,7 +111,7 @@ body{
 }
 .hero-inner{display:flex;align-items:center;gap:28px;max-width:1100px;margin:0 auto}
 .hero-copy{flex:1}
-.hero-art{flex:1;max-width:420px}
+.hero-art{flex:1;max-width:420px;min-width:280px}
 .hero-title{font-size:clamp(1.8rem,4.6vw,2.6rem);font-weight:800;line-height:1.08;margin-bottom:10px}
 .hero-sub{font-size:1rem;color:var(--muted);max-width:520px;margin-bottom:18px}
 .gradient-text{
@@ -240,6 +241,16 @@ input:checked~.toggle-track .toggle-thumb{transform:translateX(16px);}
   padding:0 24px 80px;position:relative;z-index:1;
 }
 
+.summary-row,
+.student-strip,
+.grades-card,
+.actions-row,
+.stats-bar,
+.loading-card,
+.error-card{
+  width:100%;
+}
+
 /* Toast notification */
 .toast{position:fixed;right:20px;bottom:28px;background:rgba(20,20,40,0.9);color:var(--text);padding:12px 16px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:300;font-weight:600;opacity:0;transform:translateY(8px);transition:opacity .28s,var(--tx) .28s}
 .toast.show{opacity:1;transform:translateY(0)}
@@ -247,7 +258,10 @@ input:checked~.toggle-track .toggle-thumb{transform:translateX(16px);}
 /* Responsive adjustments */
 @media(max-width:900px){
   .hero-inner{flex-direction:column-reverse;align-items:center}
-  .hero-art{max-width:320px}
+  .hero-art{max-width:320px;width:min(100%,320px)}
+  .header-inner{justify-content:center}
+  .header-right{justify-content:center}
+  .portal-link{padding:6px 10px}
 }
 
 
@@ -395,15 +409,65 @@ input:checked~.toggle-track .toggle-thumb{transform:translateX(16px);}
 
 /* Responsive */
 @media(max-width:768px){
+  .hero{padding:52px 18px 40px}
+  .hero-inner{gap:22px}
+  .search-box{flex-direction:column;align-items:stretch;padding:12px}
+  .search-input{width:100%;padding:10px 6px;text-align:center}
+  .fetch-btn{width:100%;justify-content:center}
+  .search-meta{flex-direction:column;align-items:flex-start;gap:10px}
+  .hint-text{line-height:1.4}
+  .stats-bar{padding:18px 16px;gap:12px}
   .summary-row{grid-template-columns:repeat(2,1fr);}
   .stat-divider{display:none;}
-  .stats-bar{gap:16px;}
+  .summary-card{padding:24px 16px}
+  .student-strip{padding:14px 16px;align-items:flex-start}
+  .source-pill{margin-left:0;margin-top:12px}
+  .grades-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .grades-count{margin-left:0}
+  .grades-table th,
+  .grades-table td{padding:11px 12px}
 }
 @media(max-width:480px){
-  .summary-row{grid-template-columns:1fr 1fr;}
+  .site-header{padding:0 14px}
+  .logo{gap:10px}
+  .logo-title{font-size:.9rem}
+  .logo-sub{font-size:.68rem}
+  .header-inner{justify-content:space-between;padding:8px 0;gap:10px}
+  .header-right{gap:8px}
+  .live-badge{padding:3px 10px}
+  .theme-toggle{width:38px;height:38px;margin-left:4px}
+  .portal-link{display:none}
+  .hero{padding:42px 14px 32px}
+  .hero-title{font-size:clamp(1.6rem,8vw,2.2rem)}
+  .hero-sub{font-size:.95rem}
+  .search-wrap{max-width:100%}
+  .search-box{padding:10px}
+  .summary-row{grid-template-columns:1fr;gap:12px}
+  .summary-card{padding:22px 16px}
+  .card-val{font-size:1.9rem}
+  .student-strip{flex-direction:column;align-items:flex-start;gap:12px}
+  .student-avatar{width:42px;height:42px}
+  .student-name{font-size:.95rem}
+  .student-meta{gap:6px}
+  .grades-card{border-radius:18px}
+  .grades-header{padding:16px 18px}
+  .grades-title{font-size:.95rem}
+  .grades-table{font-size:.82rem;min-width:560px}
+  .result-section{padding:0 14px 70px}
   .actions-row{flex-direction:column;}
   .action-btn{width:100%;justify-content:center;}
-  .header-right .portal-link{display:none;}
+}
+
+@media(max-width:360px){
+  .theme-toggle{width:36px;height:36px}
+  .live-badge{font-size:.7rem}
+  .hero-title{font-size:1.45rem}
+  .hero-sub{font-size:.9rem}
+  .search-input{font-size:.92rem}
+  .fetch-btn{padding:11px 16px}
+  .card-val{font-size:1.75rem}
+  .cgpa-ring-wrap{width:80px;height:80px}
+  .cgpa-num{font-size:1rem}
 }
 
 /* Focus-visible for keyboard users */

@@ -31,6 +31,10 @@ body{
   min-height:100vh; overflow-x:hidden; line-height:1.6;
 }
 
+/* Skip link */
+.skip-link{position:absolute;left:12px;top:12px;background:#07102a;color:var(--text);padding:8px 12px;border-radius:8px;z-index:400;transform:translateY(-120%);opacity:0;transition:all .18s}
+.skip-link:focus{transform:translateY(0);opacity:1;box-shadow:0 6px 22px rgba(0,0,0,0.6)}
+
 /* ── Background ────────────────────────────────────── */
 .bg-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
 .particle{position:absolute;border-radius:50%;opacity:.15;animation:float linear infinite;}
@@ -112,6 +116,7 @@ body{
 }
 .fetch-btn{box-shadow:0 10px 30px rgba(108,99,255,0.18)}
 .fetch-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(108,99,255,.4);}
+.fetch-btn:focus{outline:3px solid rgba(108,99,255,0.12);outline-offset:3px}
 .fetch-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .btn-arrow{transition:transform var(--tx);}
 .fetch-btn:hover .btn-arrow{transform:translateX(3px);}
@@ -369,6 +374,15 @@ input:checked~.toggle-track .toggle-thumb{transform:translateX(16px);}
   .actions-row{flex-direction:column;}
   .action-btn{width:100%;justify-content:center;}
   .header-right .portal-link{display:none;}
+}
+
+/* Focus-visible for keyboard users */
+:focus{outline:none}
+:focus-visible{outline:3px solid rgba(108,99,255,0.18);outline-offset:3px;border-radius:8px}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 
 /* Row entrance animation */

@@ -92,7 +92,7 @@ flowchart TD
 ## Running Locally (Quick Start)
 
 Prerequisites:
-- Node.js 18+ (recommended)
+- Node.js 20+ (recommended; uses node:20-alpine for Docker)
 
 1. Install dependencies
 

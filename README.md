@@ -78,13 +78,13 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-  A[User request] --> B{Is result cached?}
-  B -- Yes --> C[Return cached result]
-  C --> D[Trigger background scrape (if cooldown passed)]
-  B -- No --> E[Perform portal login & scrape]
-  E --> F[Parse marks & build payload]
-  F --> G[Store in cache]
-  G --> H[Return result to user]
+  A["User request"] --> B{"Is result cached?"}
+  B -->|Yes| C["Return cached result"]
+  C --> D["Trigger background scrape<br/>if cooldown passed"]
+  B -->|No| E["Perform portal login & scrape"]
+  E --> F["Parse marks & build payload"]
+  F --> G["Store in cache"]
+  G --> H["Return result to user"]
 ```
 
 ---

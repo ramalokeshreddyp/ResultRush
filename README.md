@@ -141,10 +141,29 @@ http://localhost:3000
 - Enter a Hall Ticket Number like `23A91A05I2` and click *Fetch Result*.
 - Toggle *Force fresh fetch* to bypass cache and scrape portal immediately.
 - The UI shows if data came from cache or portal and displays stats.
+- Use the dark/light mode toggle (🌙/☀️ icon) in the header to switch themes.
+- Visit the *Dev Team* page to meet the developers behind this project.
 
 Notes on instant UX:
 - The frontend maintains a short-lived localStorage cache for recently viewed HTNos so the UI can render instantly on repeat lookups while a background refresh updates the data.
 - Skeleton placeholders and animated transitions make the interface feel faster and more polished.
+
+---
+
+## Dark Mode / Light Mode
+
+The application supports both dark and light themes:
+- Click the 🌙 / ☀️ icon in the header to toggle themes.
+- Your preference is saved to localStorage and persists across sessions.
+- Smooth color transitions ensure visual continuity when switching.
+
+---
+
+## Dev Team Page
+
+Visit `/dev-team.html` to meet the developers:
+- **Rama Lokesh Reddy Penumallu** — Full Stack Developer ([GitHub](https://github.com/ramalokeshreddyp) | [LinkedIn](https://www.linkedin.com/in/rama-lokesh-reddy/))
+- **Raj Vincy Degapati** — Frontend Developer ([GitHub](https://github.com/Vincyyy07) | [LinkedIn](https://www.linkedin.com/in/raj-vincy-degapati/))
 
 ---
 

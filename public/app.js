@@ -36,6 +36,27 @@ function setLocalCached(htno, payload) {
   } catch (e) {}
 }
 
+// Dark mode toggle
+function initThemeToggle() {
+  const toggle = document.getElementById('themeToggle');
+  if (!toggle) return;
+  
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  if (savedTheme === 'light') {
+    document.documentElement.classList.add('light-mode');
+    toggle.textContent = '☀️';
+  } else {
+    document.documentElement.classList.remove('light-mode');
+    toggle.textContent = '🌙';
+  }
+  
+  toggle.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    toggle.textContent = isLight ? '☀️' : '🌙';
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────
 fetchBtn.addEventListener('click', handleFetch);
 htnoInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleFetch(); });
@@ -51,6 +72,9 @@ document.getElementById('newSearchBtn').addEventListener('click', function() {
 document.getElementById('forceRefreshBtn').addEventListener('click', function() {
   forceToggle.checked = true; handleFetch();
 });
+
+// Initialize theme toggle
+initThemeToggle();
 
 // Stats polling
 loadStats();
